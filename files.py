@@ -1,5 +1,6 @@
 import os
 import shutil
+import time
 
 class FileManager:
     def __init__(self, path):
@@ -65,11 +66,13 @@ class FileManager:
             print("\n✅ Files have been organized successfully.")
         print("\n❌ No files detected in the root directory")
 
-    def rename_files(self):
+    def rename_files(self, prefix, extension):
         files = self.files()
         for i,file_name in enumerate(files):
             _, ext = os.path.splitext(file_name)
-            os.rename(os.path.join(self.path,file_name), os.path.join(self.path, f"file_{str(i+1).zfill(3)}{ext}"))
+            extension = extension if extension else ext
+            prefix = prefix if prefix else "file"
+            os.rename(os.path.join(self.path,file_name), os.path.join(self.path, f"{prefix}_{str(i+1).zfill(3)}{extension}"))
         print("\n✅ Successfully renamed all files.")
 
 if __name__ == "__main__":
@@ -94,6 +97,8 @@ if __name__ == "__main__":
         elif choice == "3":
             manager.organize()
         elif choice == "4":
-            manager.rename_files()
+            prefix = input("\nAdd a file prefix name or enter to skip\n\n>>>").strip()
+            extension = input("\nAdd a default file extension or enter to skip\n\n>>>").strip()
+            manager.rename_files(prefix, extension)
         else:
             print("\n❌ Invalid option. Exiting program.")
